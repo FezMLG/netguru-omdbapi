@@ -4,7 +4,6 @@ const morgan = require("morgan");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 
 require("dotenv/config");
 const moviesRouter = require("./routes/movies");

@@ -125,11 +125,12 @@ router.post("/", authenticate, checkForLimit, async (req, res) => {
 
     new_user.save(function (err, result) {
       if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
+        console.error(`Error with creating movie: ${err.message}`);
+        return res.status(500).send({ message: "Error occurred" });
       }
     });
+
+    res.send(new_user);
   } catch (error) {
     console.error(`Error with creating movie: ${err.message}`);
     return res.status(500).send({ message: "Error occurred" });
