@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const movieFromOMDb = require("./omdb");
-const { nanoid } = require("nanoid");
-require("dotenv").config();
-const authenticate = require("../authenticate");
 
-const idLength = 8;
+const Movie = require("../models/Movie");
+const movieFromOMDb = require("./omdb");
+require("dotenv").config();
+const authenticate = require("../middleware/authenticate");
+const roles = require("../constant/roles");
 
 /**
  * @swagger
@@ -35,13 +35,17 @@ const idLength = 8;
  *         UserID:
  *           type: string
  *           description: ID of the user that added this movie
+ *         createdAt:
+ *           type: date
+ *           description: Date that the movie was created by the user (ms)
  *       example:
  *         id: qwerty
- *         Title: Example title
- *         Released: 1639661479674
- *         Genre: Example genre
- *         Director: Example director
- *         User: Example user
+ *         title: Example title
+ *         released: 1639661479674
+ *         genre: Example genre
+ *         director: Example director
+ *         userID: Example user
+ *         createdAt: 1639676666395
  */
 
 /**
@@ -68,10 +72,13 @@ const idLength = 8;
  *                 $ref: '#/components/schemas/Movie'
  */
 
-router.get("/", authenticate, (req, res) => {
-  const movies = req.app.db.get("movies").find({ UserID: res.locals.userId });
-
-  res.send(movies);
+router.get("/", authenticate, async (req, res) => {
+  try {
+    const movies = await Movie.find({ userID: res.locals.userId }).exec();
+    res.json(movies);
+  } catch (err) {
+    res.json({ message: err });
+  }
 });
 
 /**
@@ -99,22 +106,64 @@ router.get("/", authenticate, (req, res) => {
 
 router.post("/", authenticate, async (req, res) => {
   try {
+    // if (res.locals.role == roles.BASIC) {
+    //   console.log("we here");
+    //   const movies = await req.app.db
+    //     .get("movies")
+    //     .find({ userID: res.locals.userId });
+    //   console.log(movies);
+    //   console.log(countMoviesThisMonth(movies));
+    //   // if (countMoviesThisMonth(movies).length >= 4) {
+    //   //   return res.status(403).send({ message: `Your limit is over` });
+    //   // }
+    // }
+
+    const movieExist = await Movie.exists({ title: req.body.title });
+    if (movieExist)
+      return res
+        .status(409)
+        .send(`Title ${req.body.title} already exist in database`);
+
     const dataFromApi = await movieFromOMDb(encodeURI(req.body.title));
-    const movie = {
-      id: nanoid(idLength),
-      Title: dataFromApi["Title"],
-      Released: dataFromApi["Released"],
-      Genre: dataFromApi["Genre"],
-      Director: dataFromApi["Director"],
-      UserID: res.locals.userId,
-    };
 
-    req.app.db.get("movies").push(movie).write();
+    var new_user = new Movie({
+      title: dataFromApi["Title"],
+      released: dataFromApi["Released"],
+      genre: dataFromApi["Genre"],
+      director: dataFromApi["Director"],
+      userID: res.locals.userId,
+    });
 
-    res.send(movie);
+    new_user.save(function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+      }
+    });
   } catch (error) {
     return res.status(500).send(error);
   }
 });
+
+const countMoviesThisMonth = (data) => {
+  try {
+    var date = new Date(),
+      y = date.getFullYear(),
+      m = date.getMonth();
+    var fromDate = new Date(y, m, 1).getTime();
+    var toDate = new Date(y, m + 1, 0).getTime();
+
+    data = data.filter((item) => {
+      return (
+        item.createdAt.getTime() >= fromDate.getTime() &&
+        item.createdAt.getTime() <= toDate.getTime()
+      );
+    });
+    // return movies;
+  } catch (error) {
+    return error;
+  }
+};
 
 module.exports = router;

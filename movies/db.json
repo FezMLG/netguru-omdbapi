@@ -2,11 +2,19 @@
   "movies": [
     {
       "id": "LPDBJJTk",
-      "Title": "Halloween: The Curse of Michael Myers",
-      "Released": "29 Sep 1995",
-      "Genre": "Horror, Thriller",
-      "Director": "Joe Chappelle",
-      "UserID": 123
+      "title": "Halloween: The Curse of Michael Myers",
+      "released": "29 Sep 1995",
+      "genre": "Horror, Thriller",
+      "director": "Joe Chappelle",
+      "userID": 123
+    },
+    {
+      "id": "Q9ETbKWH",
+      "title": "Fantastic Beasts: The Secrets of Dumbledore",
+      "released": "15 Apr 2022",
+      "genre": "Adventure, Family, Fantasy",
+      "director": "David Yates",
+      "userID": 434
     }
   ]
 }

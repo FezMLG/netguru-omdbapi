@@ -12,6 +12,7 @@ function authenticate(req, res, next) {
     req.user = user;
     const decode = jwt.decode(token, process.env.JWT_SECRET);
     res.locals.userId = decode["userId"];
+    res.locals.role = decode["role"];
     next();
   });
 }
