@@ -7,7 +7,8 @@ const movieFromOMDb = async (title) => {
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
-    return res.status(500).send(error);
+    console.error(`Error with fetching data from OMDb: ${err.message}`);
+    return res.status(500).send({ message: "Error occurred" });
   }
 };
 

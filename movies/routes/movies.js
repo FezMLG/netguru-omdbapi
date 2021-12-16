@@ -3,9 +3,10 @@ const router = express.Router();
 
 const Movie = require("../models/Movie");
 const movieFromOMDb = require("./omdb");
-require("dotenv").config();
 const authenticate = require("../middleware/authenticate");
-const roles = require("../constant/roles");
+const checkForLimit = require("../middleware/checkForLimit");
+
+require("dotenv").config();
 
 /**
  * @swagger
@@ -104,20 +105,8 @@ router.get("/", authenticate, async (req, res) => {
  *         description: Some server error
  */
 
-router.post("/", authenticate, async (req, res) => {
+router.post("/", authenticate, checkForLimit, async (req, res) => {
   try {
-    // if (res.locals.role == roles.BASIC) {
-    //   console.log("we here");
-    //   const movies = await req.app.db
-    //     .get("movies")
-    //     .find({ userID: res.locals.userId });
-    //   console.log(movies);
-    //   console.log(countMoviesThisMonth(movies));
-    //   // if (countMoviesThisMonth(movies).length >= 4) {
-    //   //   return res.status(403).send({ message: `Your limit is over` });
-    //   // }
-    // }
-
     const movieExist = await Movie.exists({ title: req.body.title });
     if (movieExist)
       return res
@@ -142,28 +131,9 @@ router.post("/", authenticate, async (req, res) => {
       }
     });
   } catch (error) {
-    return res.status(500).send(error);
+    console.error(`Error with creating movie: ${err.message}`);
+    return res.status(500).send({ message: "Error occurred" });
   }
 });
-
-const countMoviesThisMonth = (data) => {
-  try {
-    var date = new Date(),
-      y = date.getFullYear(),
-      m = date.getMonth();
-    var fromDate = new Date(y, m, 1).getTime();
-    var toDate = new Date(y, m + 1, 0).getTime();
-
-    data = data.filter((item) => {
-      return (
-        item.createdAt.getTime() >= fromDate.getTime() &&
-        item.createdAt.getTime() <= toDate.getTime()
-      );
-    });
-    // return movies;
-  } catch (error) {
-    return error;
-  }
-};
 
 module.exports = router;
