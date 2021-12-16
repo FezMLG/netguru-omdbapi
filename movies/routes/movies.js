@@ -15,6 +15,7 @@ const idLength = 8;
  *       type: object
  *       required:
  *         - Title
+ *         - UserID
  *       properties:
  *         id:
  *           type: string
@@ -68,7 +69,7 @@ const idLength = 8;
  */
 
 router.get("/", authenticate, (req, res) => {
-  const movies = req.app.db.get("movies");
+  const movies = req.app.db.get("movies").find({ UserID: res.locals.userId });
 
   res.send(movies);
 });
@@ -96,7 +97,7 @@ router.get("/", authenticate, (req, res) => {
  *         description: Some server error
  */
 
-router.post("/", async (req, res) => {
+router.post("/", authenticate, async (req, res) => {
   try {
     const dataFromApi = await movieFromOMDb(encodeURI(req.body.title));
     const movie = {
@@ -105,6 +106,7 @@ router.post("/", async (req, res) => {
       Released: dataFromApi["Released"],
       Genre: dataFromApi["Genre"],
       Director: dataFromApi["Director"],
+      UserID: res.locals.userId,
     };
 
     req.app.db.get("movies").push(movie).write();
