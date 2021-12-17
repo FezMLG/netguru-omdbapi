@@ -14,7 +14,7 @@ services:
       - mongo
     environment:
       JWT_SECRET: ${JWT_SECRET}
-      OMDB_API_KEY: ${OMDB_API_KEY}
+      OMDB_TOKEN: ${OMDB_TOKEN}
   auth-service:
     container_name: recruitment-task_auth-service
     build:
