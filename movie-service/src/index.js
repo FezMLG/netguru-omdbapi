@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-app.use("/movies", moviesRouter);
+app.use("/api/movies", moviesRouter);
 
 mongoose.connect(process.env.MONGODB_URI || process.env.DB_CONNECTION, () =>
   console.log("Connected to mongodb")
@@ -43,3 +43,5 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.listen(PORT, () => console.log(`The server is running on port ${PORT}`));
+
+module.exports = app;
