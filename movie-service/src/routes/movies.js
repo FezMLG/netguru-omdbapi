@@ -75,10 +75,17 @@ require("dotenv").config();
 
 router.get("/", authenticate, async (req, res) => {
   try {
-    const movies = await Movie.find({ userID: res.locals.userId }).exec();
-    res.json(movies);
+    const movies = await Movie.find({ userID: res.locals.userId });
+    res.send({
+      movies: movies.map((movie) =>
+        (({ userId, __v, createdAt, updatedAt, ...movieInfo }) => movieInfo)(
+          movie.toJSON()
+        )
+      ),
+    });
   } catch (err) {
-    res.json({ message: err });
+    console.error(`Error fetching movies: ${err.message}`);
+    res.send(500).send({ message: "Error occurred" });
   }
 });
 
@@ -107,13 +114,25 @@ router.get("/", authenticate, async (req, res) => {
 
 router.post("/", authenticate, checkForLimit, async (req, res) => {
   try {
-    const movieExist = await Movie.exists({ title: req.body.title });
+    if (!process.env.OMDB_TOKEN)
+      return res.status(500).send({ message: `OMDB TOKEN are not provided` });
+
+    const movieExist = await Movie.exists({
+      title: req.body.title,
+      userID: res.locals.userId,
+    });
+
+    if (!req.body.title)
+      return res.status(400).send({ message: `Title is empty` });
+
     if (movieExist)
       return res
         .status(409)
-        .send(`Title ${req.body.title} already exist in database`);
+        .send({ message: `Title ${req.body.title} already exist in database` });
 
     const dataFromApi = await movieFromOMDb(encodeURI(req.body.title));
+    if (dataFromApi["Response"] == "False")
+      return res.status(404).send({ message: dataFromApi["Error"] });
 
     var new_user = new Movie({
       title: dataFromApi["Title"],
@@ -125,7 +144,7 @@ router.post("/", authenticate, checkForLimit, async (req, res) => {
 
     new_user.save(function (err, result) {
       if (err) {
-        console.error(`Error with creating movie: ${err.message}`);
+        console.error(`Error with saving movie: ${err.message}`);
         return res.status(500).send({ message: "Error occurred" });
       }
     });
