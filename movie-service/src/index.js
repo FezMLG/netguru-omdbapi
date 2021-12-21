@@ -20,6 +20,7 @@ app.use(morgan("dev"));
 app.use("/api/api-docs", swaggerUI.serve, swaggerUI.setup(swagger));
 app.use("/api/movies", moviesRouter);
 
+//COMMENT
 mongoose.connect(
   process.env.MONGODB_URI || process.env.DB_CONNECTION,
   { useNewUrlParser: true, useUnifiedTopology: true },
