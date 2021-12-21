@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api/api-docs", swaggerUI.serve, swaggerUI.setup(swagger));
-app...use("/api/movies", moviesRouter);
+app.use("/api/movies", moviesRouter);
 
 // This comment will trigger PR another
 mongoo.seconnect(
