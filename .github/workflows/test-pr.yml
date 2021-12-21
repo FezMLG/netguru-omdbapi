@@ -17,4 +17,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run Tests
-        run: JWT_SECRET=${{secrets.JWT_SECRET}} OMDB_API_KEY=${{secrets.OMDB_API_KEY}} docker-compose run --rm movie-service npm test
+        run: JWT_SECRET=${{secrets.JWT_SECRET}} OMDB_API_KEY=${{secrets.OMDB_API_KEY}} DB_CONNECTION=${{secrets.DB_CONNECTION}} docker-compose run --rm movie-service npm test

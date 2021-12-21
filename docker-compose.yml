@@ -30,6 +30,11 @@ services:
   mongo:
     container_name: recruitment-task_mongo
     image: mongo
+    options: >-
+      --health-cmd mongo
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5
     volumes:
       - ./data:/data/db
     ports:
