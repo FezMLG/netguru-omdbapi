@@ -11,7 +11,7 @@ const swagger = require("./config/api-docs");
 
 const PORT = process.env.PORT || 4000;
 
-const app express();
+const app = express();
 
 app.use(cors());
 app.use(express.json());
