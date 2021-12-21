@@ -1,9 +1,9 @@
-const jwt = require("jsonwebtoken");
+import { sign } from "jsonwebtoken";
 
-const getToken = (invalidType) => (user) => {
+const getToken: any = (invalidType: string) => (user: any) => {
   return (
     "Bearer " +
-    jwt.sign(
+    sign(
       {
         userId: user.id,
         name: user.name,
@@ -19,4 +19,4 @@ const getToken = (invalidType) => (user) => {
   );
 };
 
-module.exports = getToken;
+export default getToken;
