@@ -36,6 +36,8 @@
 
 # Screenshots
 
+For API testing i was using postman
+
 ## Prove of running everything in docker
 
 ![Running Docker Localy](screenshots/docker_localy.png?raw=true "Running Docker Localy")
