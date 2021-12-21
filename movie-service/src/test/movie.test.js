@@ -1,17 +1,17 @@
-import { use, expect as _expect, request } from "chai";
-import chaiHttp from "chai-http";
+const chai = require("chai");
+const chaiHttp = require("chai-http");
 
-import server from "../index";
-import Movie from "../models/Movie";
-import users from "./users.js";
-import getToken from "./mocks";
+const server = require("../index");
+const Movie = require("../models/Movie");
+const users = require("./users");
+const getToken = require("./mocks");
 
-use(chaiHttp);
+chai.use(chaiHttp);
 
-const expect = _expect;
-const api = request(server).keepOpen();
-const getMovie = (token: any) => api.get("/api/movies").set("Authorization", token);
-const createMovie = (title: any, token: any) =>
+const expect = chai.expect;
+const api = chai.request(server).keepOpen();
+const getMovie = (token) => api.get("/api/movies").set("Authorization", token);
+const createMovie = (title, token) =>
   api.post("/api/movies").set("Authorization", token).send({ title });
 const valid = getToken();
 
@@ -58,6 +58,15 @@ describe("Movie Controller", () => {
       const res = await createMovie("dsadasdASDasd", valid(users.basic));
       expect(res.status).to.be.equal(404);
     });
+
+    // it("should return 500 and error message if OMDB TOKEN is not provided", async () => {
+    //   process.env.OMDB_TOKEN = undefined;
+    //   const res = await createMovie(
+    //     "The Shawshank Redemption",
+    //     valid(users.basic)
+    //   );
+    //   expect(res.status).to.be.equal(500);
+    // });
   });
 
   afterEach(() => Movie.deleteMany({}));

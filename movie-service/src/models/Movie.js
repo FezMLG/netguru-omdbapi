@@ -1,7 +1,6 @@
-import * as mongoose from 'mongoose';
-import { Schema, model } from "mongoose";
+const mongoose = require("mongoose");
 
-const MovieSchema: Schema = new Schema(
+const MovieSchema = mongoose.Schema(
   {
     title: {
       type: String,
@@ -26,4 +25,4 @@ const MovieSchema: Schema = new Schema(
   }
 );
 
-export default mongoose.model("Movie", MovieSchema);
+module.exports = mongoose.model("Movie", MovieSchema);

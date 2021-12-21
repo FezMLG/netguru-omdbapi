@@ -1,10 +1,10 @@
-import { Router } from "express";
-const router = Router();
+const express = require("express");
+const router = express.Router();
 
-import Movie from "../models/Movie";
-import movieFromOMDb from "./omdb";
-import authenticate from "../middleware/authenticate";
-import checkForLimit from "../middleware/checkForLimit";
+const Movie = require("../models/Movie");
+const movieFromOMDb = require("./omdb");
+const authenticate = require("../middleware/authenticate");
+const checkForLimit = require("../middleware/checkForLimit");
 
 require("dotenv").config();
 
@@ -77,13 +77,13 @@ router.get("/", authenticate, async (req, res) => {
   try {
     const movies = await Movie.find({ userID: res.locals.userId });
     res.send({
-      movies: movies.map((movie: any) =>
+      movies: movies.map((movie) =>
         (({ userId, __v, createdAt, updatedAt, ...movieInfo }) => movieInfo)(
           movie.toJSON()
         )
       ),
     });
-  } catch (err: any) {
+  } catch (err) {
     console.error(`Error fetching movies: ${err.message}`);
     res.send(500).send({ message: "Error occurred" });
   }
@@ -142,7 +142,7 @@ router.post("/", authenticate, checkForLimit, async (req, res) => {
       userID: res.locals.userId,
     });
 
-    new_user.save(function (err: { message: any; }, result: any) {
+    new_user.save(function (err, result) {
       if (err) {
         console.error(`Error with saving movie: ${err.message}`);
         return res.status(500).send({ message: "Error occurred" });
@@ -150,10 +150,10 @@ router.post("/", authenticate, checkForLimit, async (req, res) => {
     });
 
     res.send(new_user);
-  } catch (error: any) {
-    console.error(`Error with creating movie: ${error.message}`);
+  } catch (error) {
+    console.error(`Error with creating movie: ${err.message}`);
     return res.status(500).send({ message: "Error occurred" });
   }
 });
 
-export default router;
+module.exports = router;

@@ -1,17 +1,17 @@
-import { use, expect as _expect, request } from "chai";
-import chaiHttp from "chai-http";
+const chai = require("chai");
+const chaiHttp = require("chai-http");
 
-import Movie from "../models/Movie";
-import server from "../index";
-import users from "./users";
-import getToken from "./mocks";
+const Movie = require("../models/Movie");
+const server = require("../index");
+const users = require("./users");
+const getToken = require("./mocks");
 
-use(chaiHttp);
+chai.use(chaiHttp);
 
-const expect = _expect;
-const api = request(server).keepOpen();
-const getMovie = (token: string) => api.get("/api/movies").set("Authorization", token);
-const createMovie = (title: string, token: string) =>
+const expect = chai.expect;
+const api = chai.request(server).keepOpen();
+const getMovie = (token) => api.get("/api/movies").set("Authorization", token);
+const createMovie = (title, token) =>
   api.post("/api/movies").set("Authorization", token).send({ title });
 const moviesList = [
   "The Shawshank Redemption",

@@ -1,16 +1,13 @@
-import Movie from "../models/Movie";
+const Movie = require("../models/Movie");
 const rolesArray = ["basic", "premium"];
-import roles from "../constant/roles";
-import { NextFunction, Request, Response } from "express";
+const roles = require("../constant/roles");
 
-type FirstLast = 0 | 1;
-
-const getFirstLastDay = (day: FirstLast) => {
+const getFirstLastDay = (day) => {
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth() + day, day === 0 ? 1 : 0);
 };
 
-const checkForLimit = async (req: Request, res: Response, next: NextFunction) => {
+const checkForLimit = async (req, res, next) => {
   if (rolesArray.includes(res.locals.role)) {
     if (res.locals.role == roles.BASIC) {
       try {
@@ -23,7 +20,7 @@ const checkForLimit = async (req: Request, res: Response, next: NextFunction) =>
         if (totalBooksPerMonth > 4) {
           return res.status(403).send({ message: `Your limit is over` });
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error(`Error counting books: ${err.message}`);
         return res.status(500).send({ message: "Error occurred" });
       }
@@ -34,4 +31,4 @@ const checkForLimit = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export default checkForLimit;
+module.exports = checkForLimit;

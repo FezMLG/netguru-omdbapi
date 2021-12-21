@@ -3,4 +3,4 @@ const roles = {
   PREMIUM: "premium",
 };
 
-export default roles;
+module.exports = roles;
