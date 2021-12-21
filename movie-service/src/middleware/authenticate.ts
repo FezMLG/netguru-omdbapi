@@ -5,7 +5,6 @@ import jwt_decode from "jwt-decode";
 import roles from '../constant/roles';
 
 const authenticate = (req: Request, res: Response, next: NextFunction) => {
-  console.log("trying");
   const { authorization } = req.headers;
 
   if (!authorization) {
