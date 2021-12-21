@@ -1,0 +1,20 @@
+name: Test
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  pull_request:
+    branches: [master]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+
+      - name: Run Tests
+        run: JWT_SECRET=${{secrets.JWT_SECRET}} OMDB_API_KEY=${{secrets.OMDB_API_KEY}} docker-compose run --rm movie-service npm test
