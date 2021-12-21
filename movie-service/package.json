@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --timeout 40000 --exit dist/test/*.test.js",
-    "dev-test": "nyc mocha --timeout 40000 --exit --require ts-node/register src/test/*.test.ts",
+    "test": "NODE_ENV=test nyc mocha --timeout 40000 --exit dist/test/*.test.js",
+    "dev-test": "NODE_ENV=local nyc mocha --timeout 40000 --exit --require ts-node/register src/test/*.test.ts",
     "start": "nodemon ./src/index.ts",
     "build": "tsc"
   },
@@ -20,7 +20,6 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "jwt-decode": "^3.1.2",
     "lowdb": "^1.0.0",
     "mongoose": "^6.1.2",
     "morgan": "^1.10.0",

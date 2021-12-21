@@ -3,10 +3,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { serve, setup } from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
-import * as dotenv from 'dotenv';
 
-dotenv.config();
-
+import "dotenv/config";
 import moviesRouter from "./routes/movies";
 const PORT = process.env.PORT || 4000;
 const options: any = {

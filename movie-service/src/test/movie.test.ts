@@ -3,7 +3,7 @@ import chaiHttp from "chai-http";
 
 import server from "../index";
 import Movie from "../models/Movie";
-import users from "./users";
+import users from "./users.js";
 import getToken from "./mocks";
 
 use(chaiHttp);
