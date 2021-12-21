@@ -16,8 +16,15 @@ jobs:
       - name: Check Out Repo
         uses: actions/checkout@v2
 
+      - name: create env file
+        run: |
+          touch .env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo OMDB_TOKEN=${{ secrets.OMDB_TOKEN }} >> .env
+          echo DB_CONNECTION=${{ secrets.DB_CONNECTION }} >> .env
+
       - name: Run Tests
-        run: JWT_SECRET=${{secrets.JWT_SECRET}} OMDB_TOKEN=${{secrets.OMDB_TOKEN}} DB_CONNECTION=${{secrets.DB_CONNECTION}} docker-compose run --rm movie-service npm test
+        run: docker-compose run --rm movie-service npm test
 
   Deploy:
     needs: Test
