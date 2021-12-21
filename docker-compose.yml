@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   movie-service:
-    container_name: recruitment-task_movie-service
+    container_name: movie-service
     restart: always
     build:
       context: ./movie-service
@@ -17,7 +17,7 @@ services:
       OMDB_TOKEN: ${OMDB_TOKEN}
       DB_CONNECTION: ${DB_CONNECTION}
   auth-service:
-    container_name: recruitment-task_auth-service
+    container_name: auth-service
     build:
       context: ./auth-service
       dockerfile: Dockerfile
@@ -28,7 +28,7 @@ services:
     environment:
       JWT_SECRET: ${JWT_SECRET}
   mongo:
-    container_name: recruitment-task_mongo
+    container_name: mongo
     image: mongo
     volumes:
       - ./data:/data/db
