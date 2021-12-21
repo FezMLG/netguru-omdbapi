@@ -1,4 +1,5 @@
 import { sign } from "jsonwebtoken";
+import endpoint from '../config/endpoints.config';
 
 const getToken: any = (invalidType: string) => (user: any) => {
   return (
@@ -9,7 +10,7 @@ const getToken: any = (invalidType: string) => (user: any) => {
         name: user.name,
         role: invalidType == "userRole" ? "invalidRole" : user.role,
       },
-      invalidType == "jwtSecret" ? "invalidToken" : process.env.JWT_SECRET,
+      invalidType == "jwtSecret" ? "invalidToken" : endpoint.JWT_SECRET,
       {
         issuer: "https://www.netguru.com/",
         subject: `${user.id}`,
