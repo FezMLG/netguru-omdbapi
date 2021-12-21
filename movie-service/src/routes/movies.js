@@ -29,22 +29,22 @@ router.post("/", authenticate, checkForLimit, async (req, res) => {
     if (!process.env.OMDB_TOKEN)
       return res.status(500).send({ message: `OMDB TOKEN are not provided` });
 
-    const movieExist = await Movie.exists({
-      title: req.body.title,
-      userID: res.locals.userId,
-    });
-
     if (!req.body.title)
       return res.status(400).send({ message: `Title is empty` });
+
+    const dataFromApi = await movieFromOMDb(encodeURI(req.body.title));
+    if (dataFromApi["Response"] == "False")
+      return res.status(404).send({ message: dataFromApi["Error"] });
+
+    const movieExist = await Movie.exists({
+      title: dataFromApi["Title"],
+      userID: res.locals.userId,
+    });
 
     if (movieExist)
       return res
         .status(409)
         .send({ message: `Title ${req.body.title} already exist in database` });
-
-    const dataFromApi = await movieFromOMDb(encodeURI(req.body.title));
-    if (dataFromApi["Response"] == "False")
-      return res.status(404).send({ message: dataFromApi["Error"] });
 
     var new_user = new Movie({
       title: dataFromApi["Title"],
