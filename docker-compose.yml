@@ -15,6 +15,7 @@ services:
     environment:
       JWT_SECRET: ${JWT_SECRET}
       OMDB_TOKEN: ${OMDB_TOKEN}
+      DB_CONNECTION: ${DB_CONNECTION}
   auth-service:
     container_name: recruitment-task_auth-service
     build:

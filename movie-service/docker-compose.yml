@@ -13,6 +13,7 @@ services:
     environment:
       JWT_SECRET: ${JWT_SECRET}
       OMDB_TOKEN: ${OMDB_TOKEN}
+      DB_CONNECTION: ${DB_CONNECTION}
   mongo:
     container_name: mongo
     image: mongo

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
-const MovieSchema = mongoose.Schema(
+const MovieSchema = new Schema(
   {
     title: {
       type: String,

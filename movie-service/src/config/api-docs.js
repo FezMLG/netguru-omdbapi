@@ -4,7 +4,7 @@ const swagger = {
   openapi: "3.0.0",
   info: {
     description: "This is a simple movie API",
-    version: "1.0.0",
+    version: "1.0.0-oas3",
     title: "Simple Movie API",
   },
   tags: [
