@@ -38,18 +38,18 @@
 
 For API testing i was using postman
 
-## Prove of running everything in docker
+### Prove of running everything in docker
 
 ![Running Docker Localy](screenshots/docker_localy.png?raw=true "Running Docker Localy")
 
-## First you need to login to `auth service` - `POST /auth` with cridentials in `auth-service/src/auth.js` file.
+### First you need to login to `auth service` - `POST /auth` with cridentials in `auth-service/src/auth.js` file.
 
 ![Auth Reponse](screenshots/logging_in.png?raw=true "Auth Response")
 
-## Getting movies from `movie-service` - `GET /api/movies`
+### Getting movies from `movie-service` - `GET /api/movies`
 
 ![Get Movies](screenshots/get_movies.png?raw=true "Get Movies")
 
-## Adding movies with `movie-service` - `POST /api/movies`
+### Adding movies with `movie-service` - `POST /api/movies`
 
 ![Adding Movies](screenshots/adding_movies.png?raw=true "Adding Movies")
