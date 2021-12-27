@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { authFactory, AuthError } = require("./auth");
+const cors = require("./cors");
 
 const PORT = 3000;
 const { JWT_SECRET } = process.env;
@@ -13,6 +14,7 @@ const auth = authFactory(JWT_SECRET);
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors);
 
 app.post("/auth", (req, res, next) => {
   if (!req.body) {
