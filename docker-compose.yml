@@ -2,7 +2,6 @@ version: '3.7'
 services:
   movie-service:
     container_name: movie-service
-    restart: always
     build:
       context: ./movie-service
       dockerfile: Dockerfile
@@ -16,6 +15,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       OMDB_TOKEN: ${OMDB_TOKEN}
       DB_CONNECTION: ${DB_CONNECTION}
+    restart: unless-stopped
   auth-service:
     container_name: auth-service
     build:
@@ -27,6 +27,7 @@ services:
         target: 3000
     environment:
       JWT_SECRET: ${JWT_SECRET}
+    restart: unless-stopped
   mongo:
     container_name: mongo
     image: mongo
@@ -34,3 +35,4 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
+    restart: unless-stopped
